@@ -1,7 +1,10 @@
 %include "constants/syscalls.asm"
 %include "constants/flags.asm"
 %include "constants/std_fd.asm"
-%include "utils/files.asm"
+
+%include "parser/parser.inc"
+%include "utils/files.inc"
+%include "utils/output.inc"
 
 section .text
     global _start
@@ -24,7 +27,7 @@ section .text
         ; print input file
         push input_file_buffer.len
         push input_file_buffer 
-        call print_file
+        call print
         add rsp, 16
 
         ; close input file
@@ -52,8 +55,11 @@ section .text
         ; print the pattern file
         push pattern_file_buffer.len
         push pattern_file_buffer 
-        call print_file
+        call print
         add rsp, 16
+
+        push pattern_file_buffer
+        call parse_regex
 
         ; close pattern file
         push r9

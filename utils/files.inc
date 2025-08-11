@@ -1,0 +1,1 @@
+extern open_file, read_file, close_file
